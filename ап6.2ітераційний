@@ -1,0 +1,79 @@
+#include <iostream>
+#include <iomanip>
+#include <cassert>
+#include <windows.h> // Для налаштування кодування
+
+// Прототипи функцій
+void printArrayIterative(const int* arr, int size);
+int findMaxOddIndexIterative(const int* arr, int size);
+void swapLastWithMaxOddIterative(int* arr, int size);
+void runUnitTests();
+
+int main() {
+    // Встановлюємо UTF-8 для консолі
+    SetConsoleCP(65001);
+    SetConsoleOutputCP(65001);
+
+    // 1. Перевірка Unit-тестів
+    runUnitTests();
+
+    std::cout << "\n-----------------------------------\n\n";
+
+    // 2. Основна програма
+    int a[] = { 4, 12, 7, 3, 19, 8, 15, 2 };
+    int n = sizeof(a) / sizeof(a[0]);
+
+    std::cout << "Початковий масив:" << std::endl;
+    printArrayIterative(a, n);
+
+    swapLastWithMaxOddIterative(a, n);
+
+    std::cout << "\nМодифікований масив (ітеративно):" << std::endl;
+    printArrayIterative(a, n);
+
+    return 0;
+}
+
+void runUnitTests() {
+    std::cout << "=== RUNNING UNIT TESTS ===" << std::endl;
+
+    int test1[] = { 4, 12, 7, 3, 19, 8, 15, 2 };
+    assert(findMaxOddIndexIterative(test1, 8) == 4);
+    std::cout << "[TEST 1] Пошук найбільшого непарного: PASSED" << std::endl;
+
+    int test2[] = { 2, 4, 6, 8 };
+    assert(findMaxOddIndexIterative(test2, 4) == -1);
+    std::cout << "[TEST 2] Перевірка масиву без непарних елементів: PASSED" << std::endl;
+
+    std::cout << "=== ALL TESTS PASSED SUCCESSFULLY! ===" << std::endl;
+}
+
+void printArrayIterative(const int* arr, int size) {
+    for (int i = 0; i < size; ++i) {
+        std::cout << std::setw(5) << arr[i];
+    }
+    std::cout << std::endl;
+}
+
+int findMaxOddIndexIterative(const int* arr, int size) {
+    int maxOddIndex = -1;
+    for (int i = 0; i < size; ++i) {
+        if (arr[i] % 2 != 0) {
+            if (maxOddIndex == -1 || arr[i] > arr[maxOddIndex]) {
+                maxOddIndex = i;
+            }
+        }
+    }
+    return maxOddIndex;
+}
+
+void swapLastWithMaxOddIterative(int* arr, int size) {
+    if (size <= 0) return;
+
+    int maxOddIdx = findMaxOddIndexIterative(arr, size);
+    if (maxOddIdx != -1) {
+        int temp = arr[size - 1];
+        arr[size - 1] = arr[maxOddIdx];
+        arr[maxOddIdx] = temp;
+    }
+}
